@@ -267,11 +267,12 @@ final class _SignupState extends State<Signup> {
   Future<void> onAddUserButtonClicked() async {
     final _name = _nameController.text.trim();
     final _age = _ageController.text.trim();
+    
     if (_name.isEmpty || _age.isEmpty) {
       return;
     }
     print('$_name $_age');
-    final _user = DataModel(name: _name, age: _age);
+    final _user = DataModel(name: _name, age: _age,c_no: _phoneNumberController.text.trim(),dob: _dobController.text.trim(),email: _emailController.text.trim());
     addUser(_user);
   }
 }

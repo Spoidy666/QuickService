@@ -30,13 +30,11 @@ class Userlist extends StatelessWidget {
                   data.name,
                   style: TextStyle(color: Colors.white),
                 ),
-                subtitle: Text(
-                  data.age,
-                  style: TextStyle(color: Colors.white),
-                ),
                 trailing: IconButton(
                     onPressed: () {
-                      deleteUser(index);
+                      if (data.id != Null) {
+                        deleteUser(data.id!);
+                      }
                     },
                     icon: const Icon(
                       Icons.delete,
