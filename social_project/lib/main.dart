@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_project/db/dataBase.dart';
+
 import 'package:social_project/pages/loginPage.dart';
 
 Future<void> main() async {

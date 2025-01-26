@@ -17,7 +17,6 @@ bool show_confirm_password = true;
 bool show_create_password = true;
 final _nameController = TextEditingController();
 final _emailController = TextEditingController();
-final _genderController = TextEditingController();
 final _phoneNumberController = TextEditingController();
 final _dobController = TextEditingController();
 final _ageController = TextEditingController();
