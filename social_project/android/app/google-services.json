@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "234142976479",
+    "project_id": "serveasy-41bd3",
+    "storage_bucket": "serveasy-41bd3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:234142976479:android:d41067d447eb21f4359c6a",
+        "android_client_info": {
+          "package_name": "com.example.social_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAp4OUR37dHgKPgZ0-Xi7Y89KKeSfbW2a0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

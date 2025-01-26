@@ -19,7 +19,6 @@ class _LoginpageState extends State<Loginpage> {
 
   @override
   Widget build(BuildContext context) {
-    initializeDataBase();
     return Container(
       color: Colors.black,
       child: SafeArea(
@@ -48,7 +47,7 @@ class _LoginpageState extends State<Loginpage> {
                               color: Colors.white,
                             ),
                             Text(
-                              "Service Provider",
+                              "ServEasy",
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
@@ -190,3 +189,4 @@ class CurvedPainter extends CustomPainter {
 showPasswordFunction() {
   showPassword = !showPassword;
 }
+

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:social_project/db/dataBase.dart';
 import 'package:social_project/models/data_model.dart';
-
 import 'package:social_project/pages/loginPage.dart';
 import 'package:social_project/pages/termsScreen.dart';
 
@@ -20,14 +19,13 @@ final _emailController = TextEditingController();
 final _phoneNumberController = TextEditingController();
 final _dobController = TextEditingController();
 final _ageController = TextEditingController();
-final _locationController = TextEditingController();
 final _createPasswordController = TextEditingController();
 final _confirmPasswordController = TextEditingController();
 
 final class _SignupState extends State<Signup> {
   @override
   Widget build(BuildContext context) {
-    initializeDataBase();
+    getAllUsers();
     return Container(
       color: Colors.black,
       child: SafeArea(
@@ -47,7 +45,8 @@ final class _SignupState extends State<Signup> {
                       child: Column(
                         children: [
                           Text(
-                            "Sign Up",
+                            '''Let's create your
+      account''',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 30,
@@ -55,7 +54,7 @@ final class _SignupState extends State<Signup> {
                           ),
                           SizedBox(height: 20),
                           Text(
-                            "Create your account ",
+                            "SignUp",
                             style: TextStyle(
                                 fontSize: 20, color: Colors.grey[200]),
                           ),
@@ -122,43 +121,42 @@ final class _SignupState extends State<Signup> {
                           SizedBox(
                             height: 15,
                           ),
-                          TextFormField(
-                            controller: _dobController,
-                            decoration: InputDecoration(
-                                prefixIcon: Icon(Icons.date_range),
-                                hintText: "DD-MM-YYYY",
-                                fillColor: Colors.white,
-                                filled: true,
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(100))),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 6,
+                                child: TextFormField(
+                                  controller: _dobController,
+                                  decoration: InputDecoration(
+                                      prefixIcon: Icon(Icons.date_range),
+                                      hintText: "DD-MM-YYYY",
+                                      fillColor: Colors.white,
+                                      filled: true,
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(100))),
+                                ),
+                              ),
+                              Expanded(flex: 1, child: SizedBox(width: 1)),
+                              Expanded(
+                                flex: 4,
+                                child: TextFormField(
+                                  controller: _ageController,
+                                  decoration: InputDecoration(
+                                      prefixIcon: Icon(Icons.numbers_outlined),
+                                      hintText: "Age",
+                                      fillColor: Colors.white,
+                                      filled: true,
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(100))),
+                                ),
+                              ),
+                            ],
                           ),
                           SizedBox(
                             height: 15,
                           ),
-                          TextFormField(
-                            controller: _ageController,
-                            decoration: InputDecoration(
-                                prefixIcon: Icon(Icons.numbers_outlined),
-                                hintText: "Age",
-                                fillColor: Colors.white,
-                                filled: true,
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(100))),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          TextFormField(
-                            controller: _locationController,
-                            decoration: InputDecoration(
-                                prefixIcon: Icon(Icons.location_on),
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(100)),
-                                fillColor: Colors.white,
-                                filled: true,
-                                hintText: 'Location'),
-                          ),
-                          SizedBox(height: 15),
                           TextFormField(
                             controller: _createPasswordController,
                             obscureText: show_create_password,
@@ -182,6 +180,8 @@ final class _SignupState extends State<Signup> {
                             controller: _confirmPasswordController,
                             obscureText: show_confirm_password,
                             decoration: InputDecoration(
+                                labelText: "Confirm Password",
+                                labelStyle: TextStyle(color: Colors.black),
                                 prefixIcon: Icon(Icons.lock),
                                 suffixIcon: IconButton(
                                     onPressed: () {
@@ -193,6 +193,14 @@ final class _SignupState extends State<Signup> {
                                 filled: true,
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(100))),
+                            validator: (value) {
+                              if (_confirmPasswordController.text !=
+                                  _createPasswordController.text) {
+                                return "p";
+                              } else {
+                                return null;
+                              }
+                            },
                           ),
                           SizedBox(
                             height: 15,
@@ -201,7 +209,8 @@ final class _SignupState extends State<Signup> {
                             height: 50,
                             child: ElevatedButton(
                               onPressed: () {
-                                onClickAddUser();
+                                onAddUserButtonClicked();
+                                // signUpToController(context);
                                 Navigator.of(context)
                                     .push(MaterialPageRoute(builder: (ctx) {
                                   return Termsscreen();
@@ -254,6 +263,17 @@ final class _SignupState extends State<Signup> {
       ),
     );
   }
+
+  Future<void> onAddUserButtonClicked() async {
+    final _name = _nameController.text.trim();
+    final _age = _ageController.text.trim();
+    if (_name.isEmpty || _age.isEmpty) {
+      return;
+    }
+    print('$_name $_age');
+    final _user = DataModel(name: _name, age: _age);
+    addUser(_user);
+  }
 }
 
 create_password_function() {
@@ -264,32 +284,23 @@ confirm_password_function() {
   show_confirm_password = !show_confirm_password;
 }
 
-Future<void> onClickAddUser() async {
-  final _name = _nameController.text.trim();
-  final _email = _emailController.text.trim();
-  final _dob = _dobController.text.trim();
-  final _age = _ageController.text.trim();
-  final _confirmPass = _confirmPasswordController.text.trim();
-  final _createPass = _createPasswordController.text.trim();
-  final _phoneNo = _phoneNumberController.text.trim();
-  final _location = _locationController.text.trim();
-  if (_name.isEmpty ||
-      _age.isEmpty ||
-      _email.isEmpty ||
-      _dob.isEmpty ||
-      _confirmPass.isEmpty ||
-      _createPass.isEmpty ||
-      _phoneNo.isEmpty ||
-      _location.isEmpty) {
-    return;
-  } else {
-    addUser(DataModel(
-        name: _name,
-        c_no: _phoneNo,
-        dob: _dob,
-        password: _confirmPass,
-        age: _age,
-        location: _location,
-        email: _email));
-  }
-}
+// Future signUpToController(context) async {
+//   if (_createPasswordController.text == _confirmPasswordController.text) {
+//     await addUser(
+//         _nameController.text,
+//         _emailController.text,
+//         int.parse(_phoneNumberController.text),
+//         _dobController.text,
+//         int.parse(_ageController.text),
+//         _createPasswordController.text,
+//         _confirmPasswordController.text);
+//     Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+//       return Termsscreen();
+//     }));
+//   } else {
+//     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+//       content: Text("password does not match"),
+//       backgroundColor: Colors.red,
+//     ));
+//   }
+// }
