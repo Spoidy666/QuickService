@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_project/pages/drawer.dart';
 import 'package:social_project/pages/homePage.dart';
-import 'package:social_project/pages/individualUser.dart';
 import 'package:social_project/pages/settingsPage.dart';
 import 'package:social_project/pages/signUp.dart';
 import 'package:social_project/pages/userList.dart';

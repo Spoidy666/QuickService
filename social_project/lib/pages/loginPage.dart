@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_project/db/dataBase.dart';
 import 'package:social_project/pages/mainPage.dart';
-
 import 'package:social_project/pages/signUp.dart';
 
 class Loginpage extends StatefulWidget {

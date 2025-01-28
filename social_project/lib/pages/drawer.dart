@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-import 'package:social_project/pages/homePage.dart';
 import 'package:social_project/pages/mainPage.dart';
 
 class drawer extends StatelessWidget {
