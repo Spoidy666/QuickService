@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_project/pages/mainPage.dart';
-
+import 'package:social_project/pages/signUp.dart';
 
 class Termsscreen extends StatefulWidget {
   const Termsscreen({super.key});
@@ -15,12 +15,12 @@ class _TermsscreenState extends State<Termsscreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black,
+      color: Theme.of(context).colorScheme.primary,
       child: SafeArea(
         child: Scaffold(
           body: SingleChildScrollView(
             child: Container(
-              color: Colors.black,
+              color: Theme.of(context).colorScheme.primary,
               padding: EdgeInsets.fromLTRB(20, 15, 20, 20),
               child: Column(
                 children: [
@@ -28,7 +28,7 @@ class _TermsscreenState extends State<Termsscreen> {
                     padding: EdgeInsets.all(30),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
-                        color: Colors.grey[900]),
+                        color: Theme.of(context).colorScheme.surface),
                     child: Column(
                       children: [
                         Center(
@@ -37,14 +37,14 @@ class _TermsscreenState extends State<Termsscreen> {
                           style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white),
+                              color: Theme.of(context).colorScheme.tertiary),
                         )),
                         Text(
                           '''
                     
-          Welcome to Service Finder App!
+     Welcome to Service Finder App!
                           
-                   This User Agreement is a legally binding contract between you and Service Finder App . By accessing or using our application  or any associated services, you agree to comply with and be bound by this Agreement. If you do not agree to these terms, please do not use our App or Services.
+              This User Agreement is a legally binding contract between you and Service Finder App . By accessing or using our application  or any associated services, you agree to comply with and be bound by this Agreement. If you do not agree to these terms, please do not use our App or Services.
                   
                           
 1. Acceptance of Terms
@@ -98,12 +98,14 @@ class _TermsscreenState extends State<Termsscreen> {
                           
             If you have any questions or concerns about this Agreement, please contact us at:
                           
-            Service Finder App Team  
-            Email: vaishnavjs14@gmail.com  
-            Phone: XXXXXXXXXX
+Service Finder App Team  
+Email: vaishnavjs14@gmail.com  
+Phone:8089093802
                   
               By using Service Finder App, you acknowledge that you have read, understood, and agree to this User Agreement.''',
-                          style: TextStyle(fontSize: 16, color: Colors.white),
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Theme.of(context).colorScheme.tertiary),
                         ),
                       ],
                     ),
@@ -116,7 +118,7 @@ class _TermsscreenState extends State<Termsscreen> {
                     children: [
                       Checkbox(
                           value: checkBoxValue,
-                          activeColor: Colors.red[300],
+                          activeColor: Theme.of(context).colorScheme.tertiary,
                           onChanged: (new_val_checkBox) {
                             setState(() {
                               checkBoxValue = new_val_checkBox;
@@ -126,7 +128,9 @@ class _TermsscreenState extends State<Termsscreen> {
                         child: Text(
                           '''I read and accept the terms and
 conditions mentioned above''',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.tertiary,
+                              fontSize: 16),
                         ),
                       )
                     ],
@@ -141,10 +145,15 @@ conditions mentioned above''',
                             backgroundColor:
                                 WidgetStatePropertyAll(Colors.grey[900])),
                         onPressed: () {
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(builder: (context) {
-                            return Mainpage();
-                          }), (Route<dynamic> route) => false);
+                          if (checkBoxValue != false) {
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(builder: (context) {
+                              return Mainpage();
+                            }), (Route<dynamic> route) => false);
+                          } else {
+                            return snack(
+                                context, "Select the check box please");
+                          }
                         },
                         child: Text(
                           "                 Confirm                 ",

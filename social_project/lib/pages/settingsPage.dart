@@ -1,23 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:social_project/pages/loginPage.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'QuickService App',
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
-      themeMode: ThemeMode.system,
-      home: SettingsPage(),
-    );
-  }
-}
+import 'package:social_project/pages/profilePage.dart';
+import 'package:social_project/theme/theme_provider.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -33,7 +19,6 @@ class _SettingsPageState extends State<SettingsPage> {
     _loadThemePreference();
   }
 
-  // Load the saved theme preference
   Future<void> _loadThemePreference() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -41,7 +26,6 @@ class _SettingsPageState extends State<SettingsPage> {
     });
   }
 
-  // Save the theme preference
   Future<void> _saveThemePreference(bool value) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool('isDarkMode', value);
@@ -49,72 +33,106 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    _loadThemePreference();
     return Container(
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('Settings'),
-        ),
-        body: ListView(
-          children: [
-            ListTile(
-              leading: Icon(Icons.account_circle),
-              title: Text('Profile'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ProfilePage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.notifications),
-              title: Text('Notifications'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => NotificationsPage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.security),
-              title: Text('Privacy & Security'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PrivacyPage()),
-                );
-              },
-            ),
-            SwitchListTile(
-              title: Text('Dark Mode'),
-              value: isDarkMode,
-              onChanged: (bool value) {
-                setState(() {
-                  isDarkMode = value;
-                });
-                _saveThemePreference(value);
-              },
-            ),
-            Divider(),
-            ListTile(
-              leading: Icon(Icons.info),
-              title: Text('About'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AboutPage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.logout),
-              title: Text('Logout'),
-              onTap: () {
-                _showLogoutDialog(context);
-              },
-            ),
-          ],
+        body: Container(
+          color: Theme.of(context).colorScheme.surface,
+          child: Column(
+            children: [
+              ListTile(
+                leading: Icon(Icons.account_circle,
+                    color: Theme.of(context).colorScheme.tertiary),
+                title: Text(
+                  'Profile',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.tertiary),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Profilepage()),
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.notifications,
+                    color: Theme.of(context).colorScheme.tertiary),
+                title: Text(
+                  'Notifications',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.tertiary),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NotificationsPage()),
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.security,
+                    color: Theme.of(context).colorScheme.tertiary),
+                title: Text(
+                  'Privacy & Security',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.tertiary),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => PrivacyPage()),
+                  );
+                },
+              ),
+              SwitchListTile(
+                title: Text(
+                  'Dark Mode',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.tertiary),
+                ),
+                value: isDarkMode,
+                activeColor: Theme.of(context).colorScheme.tertiary,
+                inactiveThumbColor: Colors.grey,
+                onChanged: (bool value) async {
+                  await _saveThemePreference(value);
+
+                  Provider.of<ThemeProvider>(context, listen: false)
+                      .toggleTheme();
+                  await _saveThemePreference(value);
+                },
+              ),
+              Divider(),
+              ListTile(
+                leading: Icon(Icons.info,
+                    color: Theme.of(context).colorScheme.tertiary),
+                title: Text(
+                  'About',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.tertiary),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AboutPage()),
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.logout,
+                    color: Theme.of(context).colorScheme.tertiary),
+                title: Text(
+                  'Logout',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.tertiary),
+                ),
+                onTap: () {
+                  _showLogoutDialog(context);
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -130,7 +148,9 @@ class _SettingsPageState extends State<SettingsPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Cancel'),
+              child: Text('Cancel',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.tertiary)),
             ),
             TextButton(
               onPressed: () {
@@ -138,9 +158,11 @@ class _SettingsPageState extends State<SettingsPage> {
                     MaterialPageRoute(builder: (context) {
                   return Loginpage();
                 }), (Route<dynamic> route) => false);
-                // Perform logout logic here
               },
-              child: Text('Logout'),
+              child: Text(
+                'Logout',
+                style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
+              ),
             ),
           ],
         );
@@ -150,19 +172,7 @@ class _SettingsPageState extends State<SettingsPage> {
 }
 
 // Dummy Profile Page
-class ProfilePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Profile'),
-      ),
-      body: Center(
-        child: Text('Profile Settings'),
-      ),
-    );
-  }
-}
+
 
 // Dummy Notifications Page
 class NotificationsPage extends StatelessWidget {

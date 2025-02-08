@@ -37,6 +37,19 @@ class Individualuser extends StatelessWidget {
                   Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
+                      "gender is " + data.gender,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          decoration: TextDecoration.none),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
                       "age is  " + data.age,
                       style: TextStyle(
                           color: Colors.white,
@@ -47,12 +60,15 @@ class Individualuser extends StatelessWidget {
                   SizedBox(
                     height: 15,
                   ),
-                  Text(
-                    "Email is " + data.email,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        decoration: TextDecoration.none),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Email is " + data.email,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          decoration: TextDecoration.none),
+                    ),
                   ),
                   SizedBox(
                     height: 30,

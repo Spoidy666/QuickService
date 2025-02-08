@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_project/pages/homePage.dart';
 import 'package:social_project/pages/mainPage.dart';
 
 class drawer extends StatelessWidget {
@@ -8,9 +9,10 @@ class drawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Theme(
       data: ThemeData(
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme:
+            IconThemeData(color: Theme.of(context).colorScheme.secondary),
         textTheme: TextTheme(
-          bodyLarge: TextStyle(color: Colors.white),
+          bodyLarge: TextStyle(color: Theme.of(context).colorScheme.surface),
         ),
         listTileTheme: ListTileThemeData(
           iconColor: Colors.white,
@@ -18,14 +20,15 @@ class drawer extends StatelessWidget {
         ),
       ),
       child: Drawer(
-        backgroundColor: Color(0xFF1E1E1E),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
             SizedBox(
               height: 250,
               child: DrawerHeader(
-                decoration: BoxDecoration(color: Color(0xFF2C2C2C)),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.secondary),
                 child: Column(
                   children: [
                     CircleAvatar(
@@ -39,14 +42,18 @@ class drawer extends StatelessWidget {
                         child: Column(
                       children: [
                         Text(
-                          "Name",
+                          Username.toString(),
                           style: TextStyle(
-                            fontSize: 24,
-                          ),
+                              fontSize: 24,
+                              color: Theme.of(context).colorScheme.tertiary),
                         ),
-                        Text(
-                          "Email_id@gmail.com",
-                          style: TextStyle(fontSize: 20),
+                        Center(
+                          child: Text(
+                            Useremail.toString(),
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Theme.of(context).colorScheme.tertiary),
+                          ),
                         )
                       ],
                     ))
@@ -55,16 +62,23 @@ class drawer extends StatelessWidget {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.home),
-              title: Text("Home"),
+              leading: Icon(Icons.home,
+                  color: Theme.of(context).colorScheme.tertiary),
+              title: Text(
+                "Home",
+                style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
+              ),
               onTap: () {
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (ctx) => Mainpage()));
               },
             ),
             ListTile(
-              leading: Icon(Icons.history),
-              title: Text("Booking"),
+              leading: Icon(Icons.history,
+                  color: Theme.of(context).colorScheme.tertiary),
+              title: Text("Booking",
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.tertiary)),
               onTap: () {
                 Navigator.pop(context);
                 //Navigator.push(context, MaterialPageRoute(builder: (context)=>Booking));         //booking navigation
@@ -72,16 +86,22 @@ class drawer extends StatelessWidget {
             ),
             Divider(),
             ListTile(
-              leading: Icon(Icons.help),
-              title: Text("Help and support"),
+              leading: Icon(Icons.help,
+                  color: Theme.of(context).colorScheme.tertiary),
+              title: Text("Help and support",
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.tertiary)),
               onTap: () {
                 Navigator.pop(context);
                 //Navigator.push(context, MaterialPageRoute(builder: (context)=>Help));         //help navigation
               },
             ),
             ListTile(
-              leading: Icon(Icons.rate_review),
-              title: Text("Rate us"),
+              leading: Icon(Icons.rate_review,
+                  color: Theme.of(context).colorScheme.tertiary),
+              title: Text("Rate us",
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.tertiary)),
               onTap: () {
                 Navigator.pop(context);
                 //Navigator.push(context, MaterialPageRoute(builder: (context)=>rating));         //rating navigation

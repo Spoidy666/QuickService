@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:social_project/db/dataBase.dart';
 import 'package:social_project/models/data_model.dart';
 import 'package:social_project/pages/individualUser.dart';
@@ -9,12 +10,15 @@ class Userlist extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
+      
       valueListenable: userListNotifier,
       builder: (BuildContext ctx, List<DataModel> Userlist, Widget? child) {
         return ListView.separated(
+          
             itemBuilder: (ctx, index) {
               final data = Userlist[index];
               return ListTile(
+                
                 onTap: () {
                   Navigator.push(
                       context,
@@ -24,16 +28,18 @@ class Userlist extends StatelessWidget {
                               )));
                 },
                 leading: CircleAvatar(
-                  backgroundColor: Colors.white,
+                  backgroundColor: Theme.of(context).colorScheme.tertiary,
                 ),
                 title: Text(
                   data.name,
-                  style: TextStyle(color: Colors.white),
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.tertiary),
                 ),
                 trailing: IconButton(
                     onPressed: () {
                       if (data.id != Null) {
                         deleteUser(data.id!);
+                        deleteSharedPreferenceName();
                       }
                     },
                     icon: const Icon(
@@ -49,4 +55,10 @@ class Userlist extends StatelessWidget {
       },
     );
   }
+}
+
+Future<void> deleteSharedPreferenceName() async {
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  sharedPreferences.remove('name');
+  sharedPreferences.remove('email');
 }
