@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:social_project/pages/profilePage.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,15 +12,18 @@ class HomeScreen extends StatefulWidget {
 
 String? Username;
 String? Useremail;
+String? Userlocation;
 
 class _HomeScreenState extends State<HomeScreen> {
   Future<void> loadUserName() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String name = sharedPreferences.getString('name') ?? "Guest";
     String email = sharedPreferences.getString('email') ?? "";
+    String location = sharedPreferences.getString('location') ?? "Location";
     setState(() {
       Username = name;
       Useremail = email;
+      Userlocation = location;
     });
   }
 
@@ -58,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Icons.location_on,
                           color: Colors.white,
                         ),
-                        Text("Location"),
+                        Text(Userlocation.toString()),
                       ],
                     )
                   ],

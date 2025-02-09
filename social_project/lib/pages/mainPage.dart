@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:social_project/dbmsquestions/question3.dart';
 import 'package:social_project/pages/drawer.dart';
 import 'package:social_project/pages/homePage.dart';
-import 'package:social_project/pages/profilePage.dart';
+import 'package:social_project/dbmsquestions/providerList.dart';
 import 'package:social_project/pages/settingsPage.dart';
 import 'package:social_project/pages/signUp.dart';
-import 'package:social_project/pages/termsScreen.dart';
 import 'package:social_project/pages/userList.dart';
 
 class Mainpage extends StatefulWidget {
@@ -15,7 +15,7 @@ class Mainpage extends StatefulWidget {
 }
 
 int _currentIndex = 0;
-final _pages = [HomeScreen(), Userlist(), Termsscreen(), SettingsPage()];
+final _pages = [HomeScreen(), Userlist(), Providerlist(), Question3()];
 
 class _homeScreenState extends State<Mainpage> {
   dynamic _page = _pages[_currentIndex];

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:social_project/pages/homePage.dart';
 import 'package:social_project/pages/mainPage.dart';
+import 'package:social_project/dbmsquestions/providerList.dart';
+import 'package:social_project/pages/sproviderInsertionPage.dart';
 
 class drawer extends StatelessWidget {
   const drawer({super.key});
@@ -80,7 +82,9 @@ class drawer extends StatelessWidget {
                   style:
                       TextStyle(color: Theme.of(context).colorScheme.tertiary)),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (ctx) => Sproviderinsertionpage()));
+                ;
                 //Navigator.push(context, MaterialPageRoute(builder: (context)=>Booking));         //booking navigation
               },
             ),

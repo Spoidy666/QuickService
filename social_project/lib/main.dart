@@ -9,6 +9,7 @@ import 'package:social_project/theme/theme_provider.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDataBase();
+  await initializeSPdatabase();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(ChangeNotifierProvider(
     create: (context) => ThemeProvider(),
@@ -21,6 +22,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    getAllUsers();
+
     return MaterialApp(
       home: Loginpage(),
       theme: Provider.of<ThemeProvider>(context).themeData,

@@ -23,11 +23,11 @@ final _dobController = TextEditingController();
 final _ageController = TextEditingController();
 final _createPasswordController = TextEditingController();
 final _confirmPasswordController = TextEditingController();
+final _locationcontroller = TextEditingController();
 
 final class _SignupState extends State<Signup> {
   @override
   Widget build(BuildContext context) {
-    getAllUsers();
     return Container(
       color: Theme.of(context).colorScheme.primary,
       child: SafeArea(
@@ -183,6 +183,22 @@ final class _SignupState extends State<Signup> {
                             height: 15,
                           ),
                           TextFormField(
+                            controller: _locationcontroller,
+                            decoration: InputDecoration(
+                                prefixIcon: Icon(Icons.location_on,
+                                    color: Colors.black),
+                                hintText: "Location(state)",
+                                hintStyle: TextStyle(color: Colors.black),
+                                fillColor: Colors.white,
+                                filled: true,
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(100))),
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          TextFormField(
                             style: TextStyle(color: Colors.black),
                             controller: _createPasswordController,
                             obscureText: show_create_password,
@@ -312,6 +328,8 @@ final class _SignupState extends State<Signup> {
       return snack(context, "Please enter your date of birth");
     } else if (_age.isEmpty) {
       return snack(context, "Please enter your age");
+    } else if (_locationcontroller.text.trim().isEmpty) {
+      return snack(context, "Enter your state ");
     } else if (_createPasswordController.text.isEmpty ||
         _createPasswordController.text != _confirmPasswordController.text) {
       return snack(context, "Password doesn't match");
@@ -322,11 +340,12 @@ final class _SignupState extends State<Signup> {
           age: _age,
           c_no: _phoneNumberController.text.trim(),
           dob: _dobController.text.trim(),
-          email: _emailController.text.trim());
+          email: _emailController.text.trim(),
+          location: _locationcontroller.text.trim());
       Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
         return Termsscreen();
       }));
-      saveName(_name, _emailController.text.trim());
+      saveName(_name, _emailController.text.trim(),_locationcontroller.text.trim());
       addUser(_user);
     }
   }
@@ -340,11 +359,12 @@ confirm_password_function() {
   show_confirm_password = !show_confirm_password;
 }
 
-Future<void> saveName(String name, String email) async {
+Future<void> saveName(String name, String email, String location) async {
   final SharedPreferences sharedPreferences =
       await SharedPreferences.getInstance();
   sharedPreferences.setString('name', name);
   sharedPreferences.setString('email', email);
+  sharedPreferences.setString('location', location);
 }
 
 void snack(context, String content) {

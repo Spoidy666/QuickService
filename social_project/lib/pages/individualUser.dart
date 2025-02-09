@@ -99,6 +99,19 @@ class Individualuser extends StatelessWidget {
                   SizedBox(
                     height: 15,
                   ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Location is " + data.location,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          decoration: TextDecoration.none),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
                   ElevatedButton(
                     onPressed: () {
                       return Navigator.of(context).pop();
