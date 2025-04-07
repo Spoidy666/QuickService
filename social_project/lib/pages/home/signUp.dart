@@ -3,8 +3,8 @@ import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:social_project/db/dataBase.dart';
 import 'package:social_project/models/data_model.dart';
-import 'package:social_project/pages/loginPage.dart';
-import 'package:social_project/pages/termsScreen.dart';
+import 'package:social_project/pages/home/loginPage.dart';
+import 'package:social_project/pages/home/termsScreen.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -345,7 +345,8 @@ final class _SignupState extends State<Signup> {
       Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
         return Termsscreen();
       }));
-      saveName(_name, _emailController.text.trim(),_locationcontroller.text.trim());
+      saveName(
+          _name, _emailController.text.trim(), _locationcontroller.text.trim(),_user.id!);
       addUser(_user);
     }
   }
@@ -359,12 +360,14 @@ confirm_password_function() {
   show_confirm_password = !show_confirm_password;
 }
 
-Future<void> saveName(String name, String email, String location) async {
+Future<void> saveName(
+    String name, String email, String location, int id) async {
   final SharedPreferences sharedPreferences =
       await SharedPreferences.getInstance();
   sharedPreferences.setString('name', name);
   sharedPreferences.setString('email', email);
   sharedPreferences.setString('location', location);
+  sharedPreferences.setInt('id', id);
 }
 
 void snack(context, String content) {

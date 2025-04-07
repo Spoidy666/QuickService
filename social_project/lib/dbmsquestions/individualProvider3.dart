@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:social_project/db/dataBase.dart';
 import 'package:social_project/models/data_model.dart';
-import 'package:social_project/pages/servicedetails.dart';
 
-class Individualprovider extends StatelessWidget {
-  final index;
-  const Individualprovider({super.key, required this.index});
+class Individualprovider3 extends StatelessWidget {
+  final DataModel user;
+  const Individualprovider3({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: ValueListenableBuilder(
-          valueListenable: sproviderListNotifer,
-          builder: (BuildContext ctx, List<Sprovider> Userlist, Widget? child) {
-            final data = Userlist[index];
+          valueListenable: userListNotifier,
+          builder: (BuildContext ctx, List<DataModel> Userlist, Widget? child) {
+            final data = user;
             return Container(
               padding: EdgeInsets.all(20),
               decoration: BoxDecoration(color: Colors.black),
@@ -25,7 +24,46 @@ class Individualprovider extends StatelessWidget {
                   Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Phone number  is " + data.pnumber,
+                      "name is " + data.name,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          decoration: TextDecoration.none),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "gender is " + data.gender,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          decoration: TextDecoration.none),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "age is  " + data.age,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          decoration: TextDecoration.none),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Email is " + data.email,
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
@@ -38,7 +76,20 @@ class Individualprovider extends StatelessWidget {
                   Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Location is " + data.plocation,
+                      "Phone number  is " + data.c_no,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          decoration: TextDecoration.none),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Dob is " + data.dob,
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
@@ -51,34 +102,11 @@ class Individualprovider extends StatelessWidget {
                   Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Service provided is " + data.service,
+                      "Location is " + data.location,
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
                           decoration: TextDecoration.none),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (data.p_id != null) {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (ctx) => ServiceDetailsPage(
-                              providerId: data.p_id!), // Force unwrap
-                        ));
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("Provider ID is missing!")));
-                      }
-                    },
-                    child: Text(
-                      "View Services",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(Colors.grey),
                     ),
                   ),
                   SizedBox(

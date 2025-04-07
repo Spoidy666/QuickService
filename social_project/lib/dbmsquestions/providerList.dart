@@ -9,7 +9,6 @@ class Providerlist extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return ValueListenableBuilder(
       valueListenable: sproviderListNotifer,
       builder: (BuildContext ctx, List<Sprovider> Userlist, Widget? child) {
@@ -30,6 +29,11 @@ class Providerlist extends StatelessWidget {
                 ),
                 title: Text(
                   data.pname,
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.tertiary),
+                ),
+                subtitle: Text(
+                  "${data.service}",
                   style:
                       TextStyle(color: Theme.of(context).colorScheme.tertiary),
                 ),

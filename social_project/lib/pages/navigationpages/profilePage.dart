@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:social_project/db/dataBase.dart';
 import 'package:social_project/models/data_model.dart';
 
-import 'package:social_project/pages/homePage.dart';
+import 'package:social_project/pages/home/homePage.dart';
 
 class Profilepage extends StatefulWidget {
   Profilepage({super.key});

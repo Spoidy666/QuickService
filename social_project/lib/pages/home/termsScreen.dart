@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:social_project/pages/mainPage.dart';
-import 'package:social_project/pages/signUp.dart';
+import 'package:social_project/pages/home/mainPage.dart';
+import 'package:social_project/pages/home/signUp.dart';
 
 class Termsscreen extends StatefulWidget {
   const Termsscreen({super.key});

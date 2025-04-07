@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:social_project/db/dataBase.dart';
 import 'package:social_project/models/data_model.dart';
-import 'package:social_project/pages/mainPage.dart';
+import 'package:social_project/pages/home/mainPage.dart';
+import 'package:social_project/pages/home/services.dart';
 
 class Sproviderinsertionpage extends StatelessWidget {
   Sproviderinsertionpage({super.key});
@@ -10,6 +11,7 @@ class Sproviderinsertionpage extends StatelessWidget {
 
   final _phoneNumberController = TextEditingController();
   final _plocationController = TextEditingController();
+  final _serviceController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     getquestion1providers();
@@ -95,6 +97,22 @@ class Sproviderinsertionpage extends StatelessWidget {
                           SizedBox(
                             height: 15,
                           ),
+                          TextFormField(
+                            controller: _serviceController,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.supervised_user_circle,
+                                color: Colors.black,
+                              ),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(100)),
+                              fillColor: Colors.white,
+                              filled: true,
+                              hintText: "Service",
+                              hintStyle: TextStyle(color: Colors.black),
+                            ),
+                            style: TextStyle(color: Colors.black),
+                          ),
                           SizedBox(
                             height: 15,
                           ),
@@ -135,6 +153,7 @@ class Sproviderinsertionpage extends StatelessWidget {
     final _name = _nameController.text.trim();
     final _location = _plocationController.text.trim();
     final _phoneNo = _phoneNumberController.text.trim();
+    final _service = _serviceController.text.trim();
 
     if (_name.isEmpty) {
       return snack(context, "Please enter your username");
@@ -142,16 +161,18 @@ class Sproviderinsertionpage extends StatelessWidget {
       return snack(context, "Please enter the phone number");
     } else if (_location.isEmpty) {
       return snack(context, "Please enter your location");
+    } else if (_service.isEmpty) {
+      return snack(context, "Please enter the servie you provide");
     } else {
       final _user = Sprovider(
-        pname: _name,
-        pnumber: _phoneNo,
-        plocation: _location,
-      );
+          pname: _name,
+          pnumber: _phoneNo,
+          plocation: _location,
+          service: _service);
+      int providerId = await addProvider(_user);
       Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-        return Mainpage();
+        return AddServicePage(providerId: providerId);
       }));
-      addProvider(_user);
     }
   }
 }

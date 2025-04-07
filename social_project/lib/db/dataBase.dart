@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:path/path.dart';
 import 'package:social_project/models/data_model.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -6,10 +7,14 @@ import 'package:sqflite/sqflite.dart';
 
 ValueNotifier<List<DataModel>> userListNotifier = ValueNotifier([]);
 ValueNotifier<List<DataModel>> q3userListNotifier = ValueNotifier([]);
+
 late Database _db;
 Future<void> initializeDataBase() async {
+  String dbPath = await getDatabasesPath();
+  String path = join(dbPath, 'user.db');
+
   _db = await openDatabase(
-    'user.db',
+    path,
     version: 1,
     onCreate: (Database db, int version) async {
       await db.execute(
@@ -73,30 +78,34 @@ Future<DataModel?> getLastUser() async {
   }
 }
 
-//Service_provider table and its funcitons
-
 ValueNotifier<List<Sprovider>> sproviderListNotifer = ValueNotifier([]);
+ValueNotifier<List<Sprovider>> UniqueListNotifier = ValueNotifier([]);
 late Database _spdb;
 Future<void> initializeSPdatabase() async {
+  String dbPath = await getDatabasesPath();
+  String path = join(dbPath, 'sp.db');
+  await databaseFactory.deleteDatabase(path);
   _spdb = await openDatabase(
-    'sp.db',
+    path,
     version: 1,
     onCreate: (Database db, int version) async {
       await db.execute(
-          'CREATE TABLE Service_provider(p_id INTEGER PRIMARY KEY ,pname TEXT,plocation TEXT,pnumber TEXT)');
+          'CREATE TABLE Service_provider(p_id INTEGER PRIMARY KEY ,pname TEXT,plocation TEXT,pnumber TEXT,service TEXT)');
+      await db.execute(
+          'CREATE TABLE Services(s_id INTEGER PRIMARY KEY,sname TEXT,stype TEXT,icost TEXT,cph TEXT,provider_id INTEGER,FOREIGN KEY (provider_id) REFERENCES Service_provider (p_id) ON DELETE CASCADE)');
+      await db.execute(
+          'CREATE TABLE Admin(admin_id INTEGER PRIMARY KEY, user_id INTEGER, service_id INTEGER, provider_id INTEGER, service_date TEXT, cost REAL, appointment_date TEXT, FOREIGN KEY (user_id) REFERENCES user (id), FOREIGN KEY (service_id) REFERENCES Services (s_id), FOREIGN KEY (provider_id) REFERENCES Service_provider (p_id) ON DELETE CASCADE)');
     },
   );
 }
 
-Future<void> addProvider(Sprovider value) async {
+Future<int> addProvider(Sprovider value) async {
   final _pid = await _spdb.rawInsert(
-      'INSERT INTO Service_provider(pname,plocation,pnumber) VALUES (?,?,?)', [
-    value.pname,
-    value.plocation,
-    value.pnumber,
-  ]);
+      'INSERT INTO Service_provider(pname,plocation,pnumber,service) VALUES (?,?,?,?)',
+      [value.pname, value.plocation, value.pnumber, value.service]);
   value.p_id = _pid;
   await getquestion1providers();
+  return _pid;
 }
 
 Future<void> getquestion1providers() async {
@@ -110,7 +119,55 @@ Future<void> getquestion1providers() async {
   sproviderListNotifer.notifyListeners();
 }
 
+Future<void> uniqueService() async {
+  final _values =
+      await _spdb.rawQuery('SELECT Distinct(service) FROM Service_provider');
+
+  sproviderListNotifer.value.clear();
+  for (var map in _values) {
+    final user = Sprovider.fromMap(map);
+    sproviderListNotifer.value.add(user);
+  }
+  UniqueListNotifier.notifyListeners();
+}
+
 Future<void> deleteProvider(int id) async {
   await _spdb.rawDelete('DELETE FROM Service_provider WHERE p_id = ?', [id]);
+  await _spdb.rawDelete('DELETE FROM Services WHERE provider_id = ?', [id]);
   await getquestion1providers();
+}
+
+ValueNotifier<List<Service>> serviceListNotifier = ValueNotifier([]);
+
+Future<void> getAllServices() async {
+  final _values = await _spdb.rawQuery('SELECT * FROM Services');
+
+  serviceListNotifier.value.clear();
+  for (var map in _values) {
+    final service = Service.fromMap(map);
+    serviceListNotifier.value.add(service);
+  }
+  serviceListNotifier.notifyListeners();
+}
+
+Future<void> addService(Service service) async {
+  await _spdb.rawInsert(
+    'INSERT INTO Services (sname, stype, icost, cph, provider_id) VALUES (?, ?, ?, ?, ?)',
+    [
+      service.sname,
+      service.stype,
+      service.icost,
+      service.cph,
+      service.providerId
+    ],
+  );
+}
+
+Future<List<Service>> getServicesByProvider(int providerId) async {
+  final List<Map<String, dynamic>> serviceMaps = await _spdb.rawQuery(
+    'SELECT * FROM Services WHERE provider_id = ?',
+    [providerId],
+  );
+
+  return serviceMaps.map((map) => Service.fromMap(map)).toList();
 }

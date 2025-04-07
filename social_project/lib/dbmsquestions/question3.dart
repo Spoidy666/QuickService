@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:social_project/db/dataBase.dart';
+import 'package:social_project/dbmsquestions/individualProvider3.dart';
 import 'package:social_project/models/data_model.dart';
 import 'package:social_project/pages/individualUser.dart';
 
@@ -33,7 +34,6 @@ class Question3 extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () {
               getUserLocation(locationController.text.trim() as String);
-              // signUpToController(context);
             },
             style: ButtonStyle(
                 backgroundColor: WidgetStatePropertyAll(Colors.black)),
@@ -61,7 +61,7 @@ class Question3 extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (ctx) => Individualuser(index: index),
+                          builder: (ctx) => Individualprovider3(user: data),
                         ),
                       );
                     },

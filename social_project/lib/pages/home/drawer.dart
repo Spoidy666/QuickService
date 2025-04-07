@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:social_project/pages/homePage.dart';
-import 'package:social_project/pages/mainPage.dart';
+import 'package:social_project/pages/home/homePage.dart';
+import 'package:social_project/pages/home/mainPage.dart';
 import 'package:social_project/dbmsquestions/providerList.dart';
 import 'package:social_project/pages/sproviderInsertionPage.dart';
 
@@ -82,10 +82,8 @@ class drawer extends StatelessWidget {
                   style:
                       TextStyle(color: Theme.of(context).colorScheme.tertiary)),
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (ctx) => Sproviderinsertionpage()));
-                ;
-                //Navigator.push(context, MaterialPageRoute(builder: (context)=>Booking));         //booking navigation
+                Navigator.pop(context);
+               
               },
             ),
             Divider(),
@@ -103,11 +101,13 @@ class drawer extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.rate_review,
                   color: Theme.of(context).colorScheme.tertiary),
-              title: Text("Rate us",
+              title: Text("Become a provider",
                   style:
                       TextStyle(color: Theme.of(context).colorScheme.tertiary)),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (ctx) => Sproviderinsertionpage()));
+                ;
                 //Navigator.push(context, MaterialPageRoute(builder: (context)=>rating));         //rating navigation
               },
             ),

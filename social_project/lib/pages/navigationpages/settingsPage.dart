@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:social_project/pages/loginPage.dart';
-import 'package:social_project/pages/profilePage.dart';
+import 'package:social_project/pages/home/loginPage.dart';
+import 'package:social_project/pages/navigationpages/profilePage.dart';
 import 'package:social_project/theme/theme_provider.dart';
 
 class SettingsPage extends StatefulWidget {

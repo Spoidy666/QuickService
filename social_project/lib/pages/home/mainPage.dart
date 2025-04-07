@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:social_project/db/dataBase.dart';
 import 'package:social_project/dbmsquestions/question3.dart';
-import 'package:social_project/pages/drawer.dart';
-import 'package:social_project/pages/homePage.dart';
+import 'package:social_project/pages/home/drawer.dart';
+import 'package:social_project/pages/home/homePage.dart';
 import 'package:social_project/dbmsquestions/providerList.dart';
-import 'package:social_project/pages/settingsPage.dart';
-import 'package:social_project/pages/signUp.dart';
+import 'package:social_project/pages/home/services.dart';
+import 'package:social_project/pages/navigationpages/settingsPage.dart';
+import 'package:social_project/pages/home/signUp.dart';
+import 'package:social_project/pages/home/testPage.dart';
 import 'package:social_project/pages/userList.dart';
 
 class Mainpage extends StatefulWidget {
@@ -88,21 +91,21 @@ class _homeScreenState extends State<Mainpage> {
                     Icons.person_2_outlined,
                     size: 24,
                   ),
-                  label: "Search"),
+                  label: "Users"),
               BottomNavigationBarItem(
                   activeIcon: Icon(Icons.settings_backup_restore_rounded),
                   icon: Icon(
                     Icons.settings_backup_restore_outlined,
                     size: 24,
                   ),
-                  label: "History"),
+                  label: "Providers"),
               BottomNavigationBarItem(
-                  activeIcon: Icon(Icons.settings_suggest_rounded),
+                  activeIcon: Icon(Icons.search),
                   icon: Icon(
-                    Icons.settings_suggest_outlined,
+                    Icons.search_sharp,
                     size: 24,
                   ),
-                  label: "Settings"),
+                  label: "Search"),
             ]));
   }
 }

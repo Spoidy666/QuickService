@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:social_project/db/dataBase.dart';
 import 'package:social_project/firebase_options.dart';
-import 'package:social_project/pages/loginPage.dart';
+import 'package:social_project/pages/home/loginPage.dart';
 import 'package:social_project/theme/theme_provider.dart';
 
 Future<void> main() async {
