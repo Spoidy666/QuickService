@@ -8,7 +8,7 @@ import 'package:social_project/pages/home/services.dart';
 import 'package:social_project/pages/navigationpages/settingsPage.dart';
 import 'package:social_project/pages/home/signUp.dart';
 import 'package:social_project/pages/home/testPage.dart';
-import 'package:social_project/pages/userList.dart';
+import 'package:social_project/pages/User/userList.dart';
 
 class Mainpage extends StatefulWidget {
   const Mainpage({super.key});

@@ -38,7 +38,7 @@ class _ProviderSearchState extends State<ProviderSearch> {
 
     final List<Map<String, dynamic>> result = await _db!.rawQuery(
         "SELECT * FROM Service_provider WHERE LOWER(service) LIKE LOWER(?)",
-        [widget.serviceType]);
+        ['%${widget.serviceType}%']);
 
     setState(() {
       serviceProviders = result;

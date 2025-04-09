@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:social_project/pages/home/history.dart';
 import 'package:social_project/pages/home/homePage.dart';
 import 'package:social_project/pages/home/mainPage.dart';
 import 'package:social_project/dbmsquestions/providerList.dart';
-import 'package:social_project/pages/sproviderInsertionPage.dart';
+import 'package:social_project/pages/Provider/sproviderInsertionPage.dart';
 
 class drawer extends StatelessWidget {
   const drawer({super.key});
@@ -82,8 +83,9 @@ class drawer extends StatelessWidget {
                   style:
                       TextStyle(color: Theme.of(context).colorScheme.tertiary)),
               onTap: () {
-                Navigator.pop(context);
-               
+                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+                  return HistoryPage();
+                }));
               },
             ),
             Divider(),

@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:social_project/db/dataBase.dart';
 import 'package:social_project/pages/navigationpages/profilePage.dart';
-import 'package:social_project/pages/navigationpages/providerSearch.dart';
+import 'package:social_project/pages/Provider/providerSearch.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

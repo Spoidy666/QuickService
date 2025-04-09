@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:social_project/db/dataBase.dart';
 import 'package:social_project/dbmsquestions/individualProvider3.dart';
 import 'package:social_project/models/data_model.dart';
-import 'package:social_project/pages/individualUser.dart';
+import 'package:social_project/pages/User/individualUser.dart';
 
 class Question3 extends StatelessWidget {
   Question3({super.key});

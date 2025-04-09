@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:social_project/models/data_model.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -11,7 +12,7 @@ ValueNotifier<List<DataModel>> q3userListNotifier = ValueNotifier([]);
 late Database _db;
 Future<void> initializeDataBase() async {
   String dbPath = await getDatabasesPath();
-  String path = join(dbPath, 'user.db');
+  String path = join(dbPath, 'user1.db');
 
   _db = await openDatabase(
     path,
@@ -36,7 +37,13 @@ Future<void> addUser(DataModel value) async {
         value.location,
       ]);
   value.id = _id;
+  saveId(_id);
   getAllUsers();
+}
+
+Future<void> saveId(int id) async {
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  sharedPreferences.setInt('id', id);
 }
 
 Future<void> getAllUsers() async {
@@ -83,8 +90,7 @@ ValueNotifier<List<Sprovider>> UniqueListNotifier = ValueNotifier([]);
 late Database _spdb;
 Future<void> initializeSPdatabase() async {
   String dbPath = await getDatabasesPath();
-  String path = join(dbPath, 'sp.db');
-  await databaseFactory.deleteDatabase(path);
+  String path = join(dbPath, 'sp1.db');
   _spdb = await openDatabase(
     path,
     version: 1,
@@ -93,8 +99,20 @@ Future<void> initializeSPdatabase() async {
           'CREATE TABLE Service_provider(p_id INTEGER PRIMARY KEY ,pname TEXT,plocation TEXT,pnumber TEXT,service TEXT)');
       await db.execute(
           'CREATE TABLE Services(s_id INTEGER PRIMARY KEY,sname TEXT,stype TEXT,icost TEXT,cph TEXT,provider_id INTEGER,FOREIGN KEY (provider_id) REFERENCES Service_provider (p_id) ON DELETE CASCADE)');
-      await db.execute(
-          'CREATE TABLE Admin(admin_id INTEGER PRIMARY KEY, user_id INTEGER, service_id INTEGER, provider_id INTEGER, service_date TEXT, cost REAL, appointment_date TEXT, FOREIGN KEY (user_id) REFERENCES user (id), FOREIGN KEY (service_id) REFERENCES Services (s_id), FOREIGN KEY (provider_id) REFERENCES Service_provider (p_id) ON DELETE CASCADE)');
+      await db.execute('''CREATE TABLE Admin(
+  admin_id INTEGER PRIMARY KEY,
+  user_id INTEGER,
+  service_id INTEGER,
+  provider_id INTEGER,
+  service_date TEXT,
+  cost REAL,
+  appointment_date TEXT,
+  notes TEXT,
+  FOREIGN KEY (user_id) REFERENCES user(id),
+  FOREIGN KEY (service_id) REFERENCES Services(s_id),
+  FOREIGN KEY (provider_id) REFERENCES Service_provider(p_id) ON DELETE CASCADE
+)
+''');
     },
   );
 }
@@ -170,4 +188,31 @@ Future<List<Service>> getServicesByProvider(int providerId) async {
   );
 
   return serviceMaps.map((map) => Service.fromMap(map)).toList();
+}
+
+Future<void> insertIntoAdminTable({
+  required int userId,
+  required int serviceId,
+  required int providerId,
+  required String serviceDate,
+  required double cost,
+  required String appointmentDate,
+  required String notes,
+}) async {
+  await _spdb.rawInsert(
+    'INSERT INTO Admin(user_id, service_id, provider_id, service_date, cost, appointment_date, notes) VALUES (?, ?, ?, ?, ?, ?, ?)',
+    [userId, serviceId, providerId, serviceDate, cost, appointmentDate, notes],
+  );
+}
+
+Future<List<Map<String, dynamic>>> getUserHistory(int userId) async {
+  final db = await initializeDataBase(); // Your DB init
+  return await _spdb.rawQuery('''
+    SELECT a.*, s.sname, p.pname
+    FROM Admin a
+    JOIN Services s ON a.service_id = s.s_id
+    JOIN Service_provider p ON a.provider_id = p.p_id
+    WHERE a.user_id = ?
+    ORDER BY a.service_date DESC
+  ''', [userId]);
 }

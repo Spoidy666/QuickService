@@ -257,7 +257,7 @@ final class _SignupState extends State<Signup> {
                             child: ElevatedButton(
                               onPressed: () {
                                 onAddUserButtonClicked();
-                                // signUpToController(context);
+                                
                               },
                               style: ButtonStyle(
                                   backgroundColor:
@@ -346,7 +346,7 @@ final class _SignupState extends State<Signup> {
         return Termsscreen();
       }));
       saveName(
-          _name, _emailController.text.trim(), _locationcontroller.text.trim(),_user.id!);
+          _name, _emailController.text.trim(), _locationcontroller.text.trim());
       addUser(_user);
     }
   }
@@ -361,13 +361,12 @@ confirm_password_function() {
 }
 
 Future<void> saveName(
-    String name, String email, String location, int id) async {
+    String name, String email, String location) async {
   final SharedPreferences sharedPreferences =
       await SharedPreferences.getInstance();
   sharedPreferences.setString('name', name);
   sharedPreferences.setString('email', email);
   sharedPreferences.setString('location', location);
-  sharedPreferences.setInt('id', id);
 }
 
 void snack(context, String content) {

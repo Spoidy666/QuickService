@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_project/db/dataBase.dart';
 import 'package:social_project/models/data_model.dart';
+import 'package:social_project/pages/Provider/bookService.dart';
 
 class ServiceDetailsPage extends StatefulWidget {
   final int providerId;
@@ -70,6 +71,19 @@ class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
                         SizedBox(
                           height: 15,
                         ),
+                        Center(
+                          child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(builder: (ctx) {
+                                  return Bookservice(
+                                      providerId: widget.providerId,
+                                      serviceId: service.sId!);
+                                }));
+                              },
+                              child: Text("Book",
+                                  style: TextStyle(color: Colors.black))),
+                        )
                       ],
                     ),
                   ),
