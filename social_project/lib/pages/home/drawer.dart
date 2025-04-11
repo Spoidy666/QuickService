@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:social_project/db/dataBase.dart';
+import 'package:social_project/dbmsquestions/q4.dart';
 import 'package:social_project/pages/home/history.dart';
 import 'package:social_project/pages/home/homePage.dart';
 import 'package:social_project/pages/home/mainPage.dart';
-import 'package:social_project/dbmsquestions/providerList.dart';
 import 'package:social_project/pages/Provider/sproviderInsertionPage.dart';
 
 class drawer extends StatelessWidget {
@@ -97,7 +98,7 @@ class drawer extends StatelessWidget {
                       TextStyle(color: Theme.of(context).colorScheme.tertiary)),
               onTap: () {
                 Navigator.pop(context);
-                //Navigator.push(context, MaterialPageRoute(builder: (context)=>Help));         //help navigation
+              
               },
             ),
             ListTile(
@@ -110,7 +111,22 @@ class drawer extends StatelessWidget {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (ctx) => Sproviderinsertionpage()));
                 ;
-                //Navigator.push(context, MaterialPageRoute(builder: (context)=>rating));         //rating navigation
+               
+              },
+            ),
+            Divider(),
+            ListTile(
+              leading: Icon(Icons.four_k_plus,
+                  color: Theme.of(context).colorScheme.tertiary),
+              title: Text("Question 4",
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.tertiary)),
+              onTap: () async {
+                await getcustomerPlumber();
+                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+                  return Q4();
+                }));
+                
               },
             ),
           ],

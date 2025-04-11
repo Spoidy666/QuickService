@@ -216,3 +216,32 @@ Future<List<Map<String, dynamic>>> getUserHistory(int userId) async {
     ORDER BY a.service_date DESC
   ''', [userId]);
 }
+
+ValueNotifier<List<Admin>> q4userListNotifier = ValueNotifier([]);
+Future<void> getcustomerPlumber() async {
+  final _values = await _spdb.rawQuery('''
+    SELECT a.*, s.sname, s.stype, p.pname 
+    FROM Admin a
+    JOIN Services s ON a.service_id = s.s_id
+    JOIN Service_provider p ON a.provider_id = p.p_id
+    WHERE LOWER(s.stype) = 'plumbing'
+  ''');
+
+  q4userListNotifier.value.clear();
+  for (var map in _values) {
+    final value = Admin.fromMap(map);
+    q4userListNotifier.value.add(value);
+  }
+  q4userListNotifier.notifyListeners();
+}
+
+Future<String?> getcustomerPlumberName(int userId) async {
+  final _values = await _db.rawQuery(
+    'SELECT name FROM User WHERE id = ?',
+    [userId],
+  );
+
+  if (_values.isNotEmpty) {
+    return _values.first['name'] as String?;
+  }
+}

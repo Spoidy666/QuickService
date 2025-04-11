@@ -24,7 +24,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
     if (userId == null) return;
 
-    final data = await getUserHistory(userId); // Define this in database.dart
+    final data = await getUserHistory(userId); 
     setState(() {
       historyList = data;
     });
