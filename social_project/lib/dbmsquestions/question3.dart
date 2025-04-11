@@ -36,12 +36,17 @@ class Question3 extends StatelessWidget {
               getUserLocation(locationController.text.trim() as String);
             },
             style: ButtonStyle(
-                backgroundColor: WidgetStatePropertyAll(Colors.black)),
+                backgroundColor: WidgetStatePropertyAll(
+                    Theme.of(context).colorScheme.tertiary)),
             child: Text(
               "                 Confirm                 ",
-              style: TextStyle(color: Colors.white, fontSize: 16),
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary, fontSize: 16),
             ),
           ),
+        ),
+        SizedBox(
+          height: 20,
         ),
         Expanded(
           child: ValueListenableBuilder(
@@ -56,38 +61,41 @@ class Question3 extends StatelessWidget {
               return ListView.separated(
                 itemBuilder: (ctx, index) {
                   final data = userList[index];
-                  return ListTile(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (ctx) => Individualprovider3(user: data),
-                        ),
-                      );
-                    },
-                    leading: CircleAvatar(
-                      backgroundColor: Theme.of(context).colorScheme.tertiary,
-                    ),
-                    title: Text(
-                      data.name,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.tertiary,
-                      ),
-                    ),
-                    trailing: IconButton(
-                      onPressed: () {
-                        if (data.id != null) {
-                          deleteUser(data.id!);
-                        }
+                  return Card(
+                    child: ListTile(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (ctx) => Individualuser(
+                              index: index,
+                            ),
+                          ),
+                        );
                       },
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.red,
+                      leading: CircleAvatar(
+                        backgroundColor: Theme.of(context).colorScheme.tertiary,
+                      ),
+                      title: Text(
+                        data.name,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.tertiary,
+                        ),
+                      ),
+                      subtitle: Text(
+                        data.email,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.tertiary,
+                        ),
                       ),
                     ),
                   );
                 },
-                separatorBuilder: (ctx, index) => const Divider(),
+                separatorBuilder: (ctx, index) {
+                  return SizedBox(
+                    height: 2,
+                  );
+                },
                 itemCount: userList.length,
               );
             },

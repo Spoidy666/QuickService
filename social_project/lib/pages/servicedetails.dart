@@ -11,7 +11,6 @@ class ServiceDetailsPage extends StatefulWidget {
   @override
   State<ServiceDetailsPage> createState() => _ServiceDetailsPageState();
 }
-
 class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
   List<Service> serviceList = [];
 
@@ -20,7 +19,6 @@ class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
     super.initState();
     fetchServices();
   }
-
   Future<void> fetchServices() async {
     final services = await getServicesByProvider(widget.providerId);
     setState(() {
@@ -44,11 +42,13 @@ class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
                 final service = serviceList[index];
                 return Card(
                   margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  color: Colors.grey[900],
+                  color: Theme.of(context).colorScheme.tertiary,
                   child: ListTile(
                     title: Text(
                       service.sname,
-                      style: TextStyle(color: Colors.white, fontSize: 18),
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 18),
                     ),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,33 +56,40 @@ class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
                         SizedBox(
                           height: 15,
                         ),
-                        Text("Type: ${service.stype}",
-                            style: TextStyle(color: Colors.grey[400])),
+                        primaryTextServiceDetails(
+                            valuetext: 'Type: ${service.stype}'),
                         SizedBox(
                           height: 15,
                         ),
-                        Text("Initial Cost: ${service.icost}",
-                            style: TextStyle(color: Colors.grey[400])),
+                        primaryTextServiceDetails(
+                            valuetext: 'Initial Cost: ${service.icost}'),
                         SizedBox(
                           height: 15,
                         ),
-                        Text("Cost Per Hour: ${service.cph}",
-                            style: TextStyle(color: Colors.grey[400])),
+                        primaryTextServiceDetails(
+                            valuetext: "Cost Per Hour: ${service.cph}"),
                         SizedBox(
                           height: 15,
                         ),
                         Center(
-                          child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context)
-                                    .push(MaterialPageRoute(builder: (ctx) {
-                                  return Bookservice(
-                                      providerId: widget.providerId,
-                                      serviceId: service.sId!);
-                                }));
-                              },
-                              child: Text("Book",
-                                  style: TextStyle(color: Colors.black))),
+                          child: SizedBox(
+                            width: 300,
+                            height: 40,
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .push(MaterialPageRoute(builder: (ctx) {
+                                    return Bookservice(
+                                        providerId: widget.providerId,
+                                        serviceId: service.sId!);
+                                  }));
+                                },
+                                child: Text("Book",
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .tertiary))),
+                          ),
                         )
                       ],
                     ),
@@ -91,5 +98,16 @@ class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
               },
             ),
     );
+  }
+}
+
+class primaryTextServiceDetails extends StatelessWidget {
+  final String valuetext;
+  const primaryTextServiceDetails({super.key, required this.valuetext});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(valuetext,
+        style: TextStyle(color: Theme.of(context).colorScheme.primary));
   }
 }

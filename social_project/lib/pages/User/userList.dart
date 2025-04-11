@@ -10,48 +10,59 @@ class Userlist extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      
       valueListenable: userListNotifier,
       builder: (BuildContext ctx, List<DataModel> Userlist, Widget? child) {
-        return ListView.separated(
-          
-            itemBuilder: (ctx, index) {
-              final data = Userlist[index];
-              return ListTile(
-                
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (ctx) => Individualuser(
-                                index: index,
-                              )));
-                },
-                leading: CircleAvatar(
-                  backgroundColor: Theme.of(context).colorScheme.tertiary,
-                ),
-                title: Text(
-                  data.name,
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.tertiary),
-                ),
-                trailing: IconButton(
-                    onPressed: () {
-                      if (data.id != Null) {
-                        deleteUser(data.id!);
-                        deleteSharedPreferenceName();
-                      }
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView.separated(
+              physics: BouncingScrollPhysics(),
+              itemBuilder: (ctx, index) {
+                final data = Userlist[index];
+                return Card(
+                  elevation: 20,
+                  child: ListTile(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (ctx) => Individualuser(
+                                    index: index,
+                                  )));
                     },
-                    icon: const Icon(
-                      Icons.delete,
-                      color: Colors.red,
-                    )),
-              );
-            },
-            separatorBuilder: (ctx, index) {
-              return Divider();
-            },
-            itemCount: Userlist.length);
+                    leading: CircleAvatar(
+                      backgroundColor: Theme.of(context).colorScheme.tertiary,
+                    ),
+                    title: Text(
+                      data.name,
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.tertiary),
+                    ),
+                    subtitle: Text(
+                      data.location,
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.tertiary),
+                    ),
+                    trailing: IconButton(
+                        onPressed: () {
+                          if (data.id != Null) {
+                            deleteUser(data.id!);
+                            deleteSharedPreferenceName();
+                          }
+                        },
+                        icon: const Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        )),
+                  ),
+                );
+              },
+              separatorBuilder: (ctx, index) {
+                return SizedBox(
+                  height: 2,
+                );
+              },
+              itemCount: Userlist.length),
+        );
       },
     );
   }

@@ -12,47 +12,54 @@ class Providerlist extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: sproviderListNotifer,
       builder: (BuildContext ctx, List<Sprovider> Userlist, Widget? child) {
-        return ListView.separated(
-            itemBuilder: (ctx, index) {
-              final data = Userlist[index];
-              return ListTile(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (ctx) => Individualprovider(
-                                index: index,
-                              )));
-                },
-                leading: CircleAvatar(
-                  backgroundColor: Theme.of(context).colorScheme.tertiary,
-                ),
-                title: Text(
-                  data.pname,
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.tertiary),
-                ),
-                subtitle: Text(
-                  "${data.service}",
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.tertiary),
-                ),
-                trailing: IconButton(
-                    onPressed: () {
-                      if (data.p_id != null) {
-                        deleteProvider(data.p_id!);
-                      }
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView.separated(
+              itemBuilder: (ctx, index) {
+                final data = Userlist[index];
+                return Card(
+                  child: ListTile(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (ctx) => Individualprovider(
+                                    index: index,
+                                  )));
                     },
-                    icon: const Icon(
-                      Icons.delete,
-                      color: Colors.red,
-                    )),
-              );
-            },
-            separatorBuilder: (ctx, index) {
-              return Divider();
-            },
-            itemCount: Userlist.length);
+                    leading: CircleAvatar(
+                      backgroundColor: Theme.of(context).colorScheme.tertiary,
+                    ),
+                    title: Text(
+                      data.pname,
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.tertiary),
+                    ),
+                    subtitle: Text(
+                      "${data.service}",
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.tertiary),
+                    ),
+                    trailing: IconButton(
+                        onPressed: () {
+                          if (data.p_id != null) {
+                            deleteProvider(data.p_id!);
+                          }
+                        },
+                        icon: const Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        )),
+                  ),
+                );
+              },
+              separatorBuilder: (ctx, index) {
+                return SizedBox(
+                  height: 2,
+                );
+              },
+              itemCount: Userlist.length),
+        );
       },
     );
   }

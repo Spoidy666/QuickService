@@ -47,7 +47,8 @@ Future<void> saveId(int id) async {
 }
 
 Future<void> getAllUsers() async {
-  final _values = await _db.rawQuery('SELECT * FROM user ORDER BY name');
+  final _values =
+      await _db.rawQuery('SELECT * FROM user ORDER BY name COLLATE NOCASE');
   print(_values);
   userListNotifier.value.clear();
   for (var map in _values) {
