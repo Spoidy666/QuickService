@@ -248,12 +248,12 @@ Future<String?> getcustomerPlumberName(int userId) async {
 }
 
 Future<int?> geticost(int id) async {
-  final List<Map<String, dynamic>> rows = await _spdb.rawQuery(
-      'SELECT icost FROM Services WHERE s_id = ?', [id]);
+  final List<Map<String, dynamic>> rows =
+      await _spdb.rawQuery('SELECT icost FROM Services WHERE s_id = ?', [id]);
 
   if (rows.isNotEmpty) {
-    final costString = rows.first['icost'].toString();  
-    icost = int.tryParse(costString) ?? 0; 
+    final costString = rows.first['icost'].toString();
+    icost = int.tryParse(costString) ?? 0;
   } else {
     icost = 0;
   }

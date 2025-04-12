@@ -11,6 +11,7 @@ class ServiceDetailsPage extends StatefulWidget {
   @override
   State<ServiceDetailsPage> createState() => _ServiceDetailsPageState();
 }
+
 class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
   List<Service> serviceList = [];
 
@@ -19,6 +20,7 @@ class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
     super.initState();
     fetchServices();
   }
+
   Future<void> fetchServices() async {
     final services = await getServicesByProvider(widget.providerId);
     setState(() {

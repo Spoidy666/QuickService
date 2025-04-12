@@ -24,7 +24,7 @@ class _ProviderSearchState extends State<ProviderSearch> {
 
   Future<void> _initializeDatabase() async {
     String dbPath = await getDatabasesPath();
-    String path = join(dbPath, 'sp.db');
+    String path = join(dbPath, 'sp1.db');
 
     _db = await openDatabase(path);
 
@@ -58,17 +58,32 @@ class _ProviderSearchState extends State<ProviderSearch> {
               itemCount: serviceProviders.length,
               itemBuilder: (context, index) {
                 final provider = serviceProviders[index];
-                return Card(
-                  child: ListTile(
-                    title: Text(provider['pname']),
-                    subtitle: Text("${provider['plocation']}"),
-                    trailing: const Icon(Icons.chat, color: Colors.black),
-                    onTap: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (ctx) {
-                        return Individualprovider(index: index);
-                      }));
-                    },
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    color: Theme.of(context).colorScheme.primary,
+                    child: ListTile(
+                      title: Text(
+                        provider['pname'],
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.tertiary),
+                      ),
+                      subtitle: Text(
+                        "${provider['plocation']}",
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.tertiary),
+                      ),
+                      trailing: const Icon(
+                        Icons.chat,
+                        color: Colors.blue,
+                      ),
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (ctx) {
+                          return Individualprovider(index: index);
+                        }));
+                      },
+                    ),
                   ),
                 );
               },

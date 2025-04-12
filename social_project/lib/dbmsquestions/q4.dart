@@ -20,6 +20,9 @@ class Q4 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Question 4'),
+      ),
       body: ValueListenableBuilder(
         valueListenable: q4userListNotifier,
         builder: (BuildContext ctx, List<Admin> Userlist, Widget? child) {
@@ -30,8 +33,10 @@ class Q4 extends StatelessWidget {
                 future: getcustomerPlumberName(data.userId),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return ListTile(
-                      title: Text('Loading...'),
+                    return Card(
+                      child: ListTile(
+                        title: Text('Loading...'),
+                      ),
                     );
                   }
 
