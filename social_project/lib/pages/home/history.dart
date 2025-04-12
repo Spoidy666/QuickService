@@ -57,7 +57,7 @@ class _HistoryPageState extends State<HistoryPage> {
                             style: TextStyle(color: Colors.grey[300])),
                         SizedBox(height: 6),
                         Text(
-                            "Booked For: ${item['service_date'].split('T')[0]}",
+                            "Booked For: ${item['appointment_date'].split('T')[0]}",
                             style: TextStyle(color: Colors.grey[400])),
                         SizedBox(height: 6),
                         Text("Cost: ₹${item['cost']}",
