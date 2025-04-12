@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:social_project/db/dataBase.dart';
 
+int? icost;
+
 class Bookservice extends StatefulWidget {
   final int providerId;
   final int serviceId;
@@ -47,12 +49,14 @@ class _BookserviceState extends State<Bookservice> {
     final serviceDate = now.toIso8601String();
     final appointmentDate = selectedDate!.toIso8601String();
 
+    await fetchCost(userId);
+
     await insertIntoAdminTable(
       userId: userId,
       providerId: widget.providerId,
       serviceId: widget.serviceId,
       serviceDate: serviceDate,
-      cost: 0.0,
+      cost: icost?.toDouble() ?? 0.0,
       appointmentDate: appointmentDate,
       notes: notesController.text,
     );
@@ -106,3 +110,14 @@ class _BookserviceState extends State<Bookservice> {
     );
   }
 }
+
+Future<void> fetchCost(int id) async {
+  try {
+    icost = await geticost(id);
+    debugPrint("Fetched cost: $icost"); 
+  } catch (e) {
+    debugPrint("Error fetching cost: $e"); 
+    icost = null;
+  }
+}
+
