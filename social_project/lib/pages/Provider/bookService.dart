@@ -49,7 +49,7 @@ class _BookserviceState extends State<Bookservice> {
     final serviceDate = now.toIso8601String();
     final appointmentDate = selectedDate!.toIso8601String();
 
-    await fetchCost(userId);
+    await fetchCost(widget.serviceId);
 
     await insertIntoAdminTable(
       userId: userId,
@@ -114,10 +114,9 @@ class _BookserviceState extends State<Bookservice> {
 Future<void> fetchCost(int id) async {
   try {
     icost = await geticost(id);
-    debugPrint("Fetched cost: $icost"); 
+    debugPrint("Fetched cost: $icost");
   } catch (e) {
-    debugPrint("Error fetching cost: $e"); 
+    debugPrint("Error fetching cost: $e");
     icost = null;
   }
 }
-

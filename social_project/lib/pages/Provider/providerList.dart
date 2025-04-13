@@ -16,52 +16,60 @@ class Providerlist extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListView.separated(
-                itemBuilder: (ctx, index) {
-                  final data = Userlist[index];
-                  return Card(
-                    elevation: 20,
-                    color: Theme.of(context).colorScheme.primary,
-                    child: ListTile(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (ctx) => Individualprovider(
-                                      index: index,
-                                    )));
-                      },
-                      leading: CircleAvatar(
-                        backgroundColor: Theme.of(context).colorScheme.tertiary,
-                      ),
-                      title: Text(
-                        data.pname,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.tertiary),
-                      ),
-                      subtitle: Text(
-                        "${data.service}",
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.tertiary),
-                      ),
-                      trailing: IconButton(
-                          onPressed: () {
-                            if (data.p_id != null) {
-                              deleteProvider(data.p_id!);
-                            }
-                          },
-                          icon: const Icon(
-                            Icons.delete,
-                            color: Colors.red,
-                          )),
+              itemBuilder: (ctx, index) {
+                final data = Userlist[index];
+                return Card(
+                  elevation: 20,
+                  color: Theme.of(context).colorScheme.primary,
+                  child: ListTile(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (ctx) => Individualprovider(
+                            provider: {
+                              'pname': data.pname,
+                              'plocation': data.plocation,
+                              'pnumber': data.pnumber,
+                              'service': data.service,
+                              'p_id': data.p_id,
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                    leading: CircleAvatar(
+                      backgroundColor: Theme.of(context).colorScheme.tertiary,
                     ),
-                  );
-                },
-                separatorBuilder: (ctx, index) {
-                  return SizedBox(
-                    height: 2,
-                  );
-                },
-                itemCount: Userlist.length),
+                    title: Text(
+                      data.pname,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.tertiary,
+                      ),
+                    ),
+                    subtitle: Text(
+                      "${data.service}",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.tertiary,
+                      ),
+                    ),
+                    trailing: IconButton(
+                      onPressed: () {
+                        if (data.p_id != null) {
+                          deleteProvider(data.p_id!);
+                        }
+                      },
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+                );
+              },
+              separatorBuilder: (ctx, index) => const SizedBox(height: 2),
+              itemCount: Userlist.length,
+            ),
           );
         },
       ),

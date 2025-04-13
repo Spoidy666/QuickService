@@ -78,11 +78,11 @@ class _ProviderSearchState extends State<ProviderSearch> {
                         color: Colors.blue,
                       ),
                       onTap: () {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (ctx) {
-                          return Individualprovider(index: index);
-                        }));
-                      },
+  Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+    return Individualprovider(provider: provider); // Pass the whole data
+  }));
+}
+,
                     ),
                   ),
                 );
