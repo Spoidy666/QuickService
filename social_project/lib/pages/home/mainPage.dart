@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:social_project/dbmsquestions/question3.dart';
 import 'package:social_project/pages/home/drawer.dart';
 import 'package:social_project/pages/home/homePage.dart';
-import 'package:social_project/dbmsquestions/providerList.dart';
+import 'package:social_project/pages/Provider/providerList.dart';
 import 'package:social_project/pages/navigationpages/settingsPage.dart';
 import 'package:social_project/pages/home/signUp.dart';
 import 'package:social_project/pages/User/userList.dart';

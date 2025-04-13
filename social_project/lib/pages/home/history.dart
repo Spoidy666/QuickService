@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:social_project/db/dataBase.dart'; // Assumes your query function is here
+import 'package:social_project/db/dataBase.dart';
+import 'package:social_project/pages/home/bookingdetailspage.dart'; // Assumes your query function is here
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -24,7 +25,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
     if (userId == null) return;
 
-    final data = await getUserHistory(userId); 
+    final data = await getUserHistory(userId);
     setState(() {
       historyList = data;
     });
@@ -40,29 +41,39 @@ class _HistoryPageState extends State<HistoryPage> {
               itemCount: historyList.length,
               itemBuilder: (context, index) {
                 final item = historyList[index];
-                return Card(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  color: Colors.grey[850],
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Service: ${item['sname']}",
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 18)),
-                        SizedBox(height: 6),
-                        Text("Provider: ${item['pname']}",
-                            style: TextStyle(color: Colors.grey[300])),
-                        SizedBox(height: 6),
-                        Text(
-                            "Booked For: ${item['appointment_date'].split('T')[0]}",
-                            style: TextStyle(color: Colors.grey[400])),
-                        SizedBox(height: 6),
-                        Text("Cost: ₹${item['cost']}",
-                            style: TextStyle(color: Colors.greenAccent)),
-                      ],
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BookingDetailsPage(booking: item),
+                      ),
+                    );
+                  },
+                  child: Card(
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    color: Colors.grey[850],
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Service: ${item['sname']}",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18)),
+                          SizedBox(height: 6),
+                          Text("Provider: ${item['pname']}",
+                              style: TextStyle(color: Colors.grey[300])),
+                          SizedBox(height: 6),
+                          Text(
+                              "Booked For: ${item['appointment_date'].split('T')[0]}",
+                              style: TextStyle(color: Colors.grey[400])),
+                          SizedBox(height: 6),
+                          Text("Cost: ₹${item['cost']}",
+                              style: TextStyle(color: Colors.greenAccent)),
+                        ],
+                      ),
                     ),
                   ),
                 );

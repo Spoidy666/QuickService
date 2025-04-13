@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:social_project/models/data_model.dart';
+import 'package:social_project/pages/home/services.dart';
 import 'package:sqflite/sqflite.dart';
 
 //Customer tables and its functions
@@ -71,7 +72,8 @@ Future<void> getUserLocation(String location) async {
 }
 
 Future<void> deleteUser(int id) async {
-  _db.rawDelete('DELETE FROM user WHERE id = ?', [id]);
+  await _db.rawDelete('DELETE FROM user WHERE id = ?', [id]);
+  await _spdb.rawDelete('DELETE FROM Admin Where user_id =?', [id]);
   getAllUsers();
 }
 
@@ -98,8 +100,11 @@ Future<void> initializeSPdatabase() async {
     onCreate: (Database db, int version) async {
       await db.execute(
           'CREATE TABLE Service_provider(p_id INTEGER PRIMARY KEY ,pname TEXT,plocation TEXT,pnumber TEXT,service TEXT)');
-      await db.execute(
-          'CREATE TABLE Services(s_id INTEGER PRIMARY KEY,sname TEXT,stype TEXT,icost TEXT,cph TEXT,provider_id INTEGER,FOREIGN KEY (provider_id) REFERENCES Service_provider (p_id) ON DELETE CASCADE)');
+      await db.execute('''CREATE TABLE Services(s_id INTEGER PRIMARY KEY,
+          sname TEXT,
+          stype TEXT,icost TEXT,
+          cph TEXT,provider_id INTEGER,
+          FOREIGN KEY (provider_id) REFERENCES Service_provider (p_id) ON DELETE CASCADE)''');
       await db.execute('''CREATE TABLE Admin(
   admin_id INTEGER PRIMARY KEY,
   user_id INTEGER,
@@ -110,21 +115,46 @@ Future<void> initializeSPdatabase() async {
   appointment_date TEXT,
   notes TEXT,
   FOREIGN KEY (user_id) REFERENCES user(id),
-  FOREIGN KEY (service_id) REFERENCES Services(s_id),
+  FOREIGN KEY (service_id) REFERENCES Services(s_id) on DELETE CASCADE,
   FOREIGN KEY (provider_id) REFERENCES Service_provider(p_id) ON DELETE CASCADE
 )
+''');
+      await db.execute('''
+CREATE TRIGGER prevent_duplicate_provider_number
+BEFORE INSERT ON Service_provider
+WHEN EXISTS (
+  SELECT 1 FROM Service_provider WHERE pnumber = NEW.pnumber
+)
+BEGIN
+  SELECT RAISE(FAIL, 'Phone number already exists for another provider');
+END;
+''');
+      await db.execute('''
+CREATE TRIGGER autofill_notes_if_empty
+AFTER INSERT ON Admin
+WHEN NEW.notes IS NULL OR LENGTH(NEW.notes) = 0
+BEGIN
+  UPDATE Admin
+  SET notes = 'No special instructions'
+  WHERE admin_id = NEW.admin_id;
+END;
 ''');
     },
   );
 }
 
-Future<int> addProvider(Sprovider value) async {
-  final _pid = await _spdb.rawInsert(
-      'INSERT INTO Service_provider(pname,plocation,pnumber,service) VALUES (?,?,?,?)',
-      [value.pname, value.plocation, value.pnumber, value.service]);
-  value.p_id = _pid;
-  await getquestion1providers();
-  return _pid;
+Future<int> addProvider(Sprovider value, context) async {
+  try {
+    final _pid = await _spdb.rawInsert(
+        'INSERT INTO Service_provider(pname,plocation,pnumber,service) VALUES (?,?,?,?)',
+        [value.pname, value.plocation, value.pnumber, value.service]);
+    value.p_id = _pid;
+    await getquestion1providers();
+    return _pid;
+  } catch (e) {
+    snack(context, 'Phone number already exist ');
+    return -1;
+  }
 }
 
 Future<void> getquestion1providers() async {
@@ -153,6 +183,7 @@ Future<void> uniqueService() async {
 Future<void> deleteProvider(int id) async {
   await _spdb.rawDelete('DELETE FROM Service_provider WHERE p_id = ?', [id]);
   await _spdb.rawDelete('DELETE FROM Services WHERE provider_id = ?', [id]);
+  await _spdb.rawDelete('DELETE FROM Admin WHERE provider_id=?', [id]);
   await getquestion1providers();
 }
 
@@ -207,14 +238,14 @@ Future<void> insertIntoAdminTable({
 }
 
 Future<List<Map<String, dynamic>>> getUserHistory(int userId) async {
-  final db = await initializeDataBase(); // Your DB init
+  final db = await initializeDataBase();
   return await _spdb.rawQuery('''
-    SELECT a.*, s.sname, p.pname
+    SELECT a.*, s.sname, p.pname,s.stype,plocation,pnumber 
     FROM Admin a
     JOIN Services s ON a.service_id = s.s_id
     JOIN Service_provider p ON a.provider_id = p.p_id
     WHERE a.user_id = ?
-    ORDER BY a.service_date DESC
+    ORDER BY a.service_date DESC 
   ''', [userId]);
 }
 

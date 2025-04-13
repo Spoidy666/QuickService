@@ -169,10 +169,12 @@ class Sproviderinsertionpage extends StatelessWidget {
           pnumber: _phoneNo,
           plocation: _location,
           service: _service);
-      int providerId = await addProvider(_user);
-      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-        return AddServicePage(providerId: providerId);
-      }));
+      int providerId = await addProvider(_user, context);
+      if (providerId != -1) {
+        Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+          return AddServicePage(providerId: providerId);
+        }));
+      }
     }
   }
 }

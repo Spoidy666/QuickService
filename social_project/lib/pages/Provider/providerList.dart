@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:social_project/db/dataBase.dart';
 import 'package:social_project/dbmsquestions/individualProvider.dart';
 import 'package:social_project/models/data_model.dart';
@@ -20,6 +19,7 @@ class Providerlist extends StatelessWidget {
                 itemBuilder: (ctx, index) {
                   final data = Userlist[index];
                   return Card(
+                    elevation: 20,
                     color: Theme.of(context).colorScheme.primary,
                     child: ListTile(
                       onTap: () {

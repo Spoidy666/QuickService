@@ -19,8 +19,6 @@ class AddServicePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Add Service"),
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
