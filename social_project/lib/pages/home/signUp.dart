@@ -24,6 +24,8 @@ final _ageController = TextEditingController();
 final _createPasswordController = TextEditingController();
 final _confirmPasswordController = TextEditingController();
 final _locationcontroller = TextEditingController();
+final TextEditingController _cityController = TextEditingController();
+final TextEditingController _stateController = TextEditingController();
 
 final class _SignupState extends State<Signup> {
   @override
@@ -104,6 +106,8 @@ final class _SignupState extends State<Signup> {
                             onChanged: (value) {
                               _genderController = value;
                             },
+                            dropdownColor:
+                                Theme.of(context).colorScheme.surface,
                           ),
                           SizedBox(
                             height: 15,
@@ -150,7 +154,7 @@ final class _SignupState extends State<Signup> {
                                   decoration: InputDecoration(
                                       prefixIcon: Icon(Icons.date_range,
                                           color: Colors.black),
-                                      hintText: "DD-MM-YYYY",
+                                      hintText: "YYYY-MM-DD",
                                       hintStyle: TextStyle(color: Colors.black),
                                       fillColor: Colors.white,
                                       filled: true,
@@ -183,11 +187,27 @@ final class _SignupState extends State<Signup> {
                             height: 15,
                           ),
                           TextFormField(
-                            controller: _locationcontroller,
+                            controller: _stateController,
                             decoration: InputDecoration(
                                 prefixIcon: Icon(Icons.location_on,
                                     color: Colors.black),
                                 hintText: "Location(state)",
+                                hintStyle: TextStyle(color: Colors.black),
+                                fillColor: Colors.white,
+                                filled: true,
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(100))),
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          TextFormField(
+                            controller: _cityController,
+                            decoration: InputDecoration(
+                                prefixIcon: Icon(Icons.location_on,
+                                    color: Colors.black),
+                                hintText: "Location(city)",
                                 hintStyle: TextStyle(color: Colors.black),
                                 fillColor: Colors.white,
                                 filled: true,
@@ -257,7 +277,6 @@ final class _SignupState extends State<Signup> {
                             child: ElevatedButton(
                               onPressed: () {
                                 onAddUserButtonClicked();
-                                
                               },
                               style: ButtonStyle(
                                   backgroundColor:
@@ -311,44 +330,94 @@ final class _SignupState extends State<Signup> {
     );
   }
 
-  Future<void> onAddUserButtonClicked() async {
-    final _name = _nameController.text.trim();
-    final _age = _ageController.text.trim();
-    final _phoneNo = _phoneNumberController.text.trim();
+  // Future<void> onAddUserButtonClicked() async {
+  //   final _name = _nameController.text.trim();
+  //   final _age = _ageController.text.trim();
+  //   final _phoneNo = _phoneNumberController.text.trim();
 
-    if (_name.isEmpty) {
+  //   if (_name.isEmpty) {
+  //     return snack(context, "Please enter your username");
+  //   } else if (_genderController == null) {
+  //     return snack(context, "Select your gender ");
+  //   } else if (_emailController.text.isEmpty) {
+  //     return snack(context, "Please enter your email");
+  //   } else if (_phoneNo.isEmpty) {
+  //     return snack(context, "Please enter the phone number");
+  //   } else if (_dobController.text.isEmpty) {
+  //     return snack(context, "Please enter your date of birth");
+  //   } else if (_age.isEmpty) {
+  //     return snack(context, "Please enter your age");
+  //   } else if (_locationcontroller.text.trim().isEmpty) {
+  //     return snack(context, "Enter your state ");
+  //   } else if (_createPasswordController.text.isEmpty ||
+  //       _createPasswordController.text != _confirmPasswordController.text) {
+  //     return snack(context, "Password doesn't match");
+  //   } else {
+  //     final _user = DataModel(
+  //         name: _name,
+  //         gender: _genderController.toString(),
+  //         age: _age,
+  //         c_no: _phoneNumberController.text.trim(),
+  //         dob: _dobController.text.trim(),
+  //         email: _emailController.text.trim(),
+  //         location: _locationcontroller.text.trim());
+  //     Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+  //       return Termsscreen();
+  //     }));
+  //     saveName(
+  //         _name, _emailController.text.trim(), _locationcontroller.text.trim());
+  //     addUser(_user);
+  //   }
+  // }
+  Future<void> onAddUserButtonClicked() async {
+    final String name = _nameController.text.trim();
+    final String email = _emailController.text.trim();
+    final String phone = _phoneNumberController.text.trim();
+    final String dob = _dobController.text.trim();
+    final String age = _ageController.text.trim();
+    final String city =
+        _cityController.text.trim(); // Changed from location to city
+    final String state = _stateController.text.trim(); // New state controller
+    final String password = _createPasswordController.text;
+    final String confirmPassword = _confirmPasswordController.text;
+    final String? gender = _genderController;
+
+    if (name.isEmpty) {
       return snack(context, "Please enter your username");
-    } else if (_genderController == null) {
-      return snack(context, "Select your gender ");
-    } else if (_emailController.text.isEmpty) {
+    } else if (gender == null) {
+      return snack(context, "Please select your gender");
+    } else if (email.isEmpty) {
       return snack(context, "Please enter your email");
-    } else if (_phoneNo.isEmpty) {
-      return snack(context, "Please enter the phone number");
-    } else if (_dobController.text.isEmpty) {
+    } else if (phone.isEmpty) {
+      return snack(context, "Please enter your phone number");
+    } else if (dob.isEmpty) {
       return snack(context, "Please enter your date of birth");
-    } else if (_age.isEmpty) {
+    } else if (age.isEmpty) {
       return snack(context, "Please enter your age");
-    } else if (_locationcontroller.text.trim().isEmpty) {
-      return snack(context, "Enter your state ");
-    } else if (_createPasswordController.text.isEmpty ||
-        _createPasswordController.text != _confirmPasswordController.text) {
-      return snack(context, "Password doesn't match");
-    } else {
-      final _user = DataModel(
-          name: _name,
-          gender: _genderController.toString(),
-          age: _age,
-          c_no: _phoneNumberController.text.trim(),
-          dob: _dobController.text.trim(),
-          email: _emailController.text.trim(),
-          location: _locationcontroller.text.trim());
-      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-        return Termsscreen();
-      }));
-      saveName(
-          _name, _emailController.text.trim(), _locationcontroller.text.trim());
-      addUser(_user);
+    } else if (city.isEmpty || state.isEmpty) {
+      // Make sure both city and state are filled
+      return snack(context, "Please enter your city and state");
+    } else if (password != confirmPassword || password.isEmpty) {
+      return snack(context, "Passwords do not match or are empty");
     }
+
+    final user = DataModel(
+      name: name,
+      gender: gender,
+      age: age,
+      c_no: phone,
+      dob: dob,
+      email: email,
+      city: city, // Pass city here
+      state: state, // Pass state here
+    );
+
+    await addUser(user);
+    await saveName(name, email, city);
+
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (ctx) => Termsscreen()),
+    );
   }
 }
 
@@ -360,8 +429,7 @@ confirm_password_function() {
   show_confirm_password = !show_confirm_password;
 }
 
-Future<void> saveName(
-    String name, String email, String location) async {
+Future<void> saveName(String name, String email, String location) async {
   final SharedPreferences sharedPreferences =
       await SharedPreferences.getInstance();
   sharedPreferences.setString('name', name);

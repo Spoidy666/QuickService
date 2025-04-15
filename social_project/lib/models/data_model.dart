@@ -1,42 +1,94 @@
+// class DataModel {
+//   int? id;
+
+//   final String name;
+//   final String c_no;
+//   final String gender;
+//   final String dob;
+//   final String age;
+//   final String email;
+//   final String location;
+
+//   DataModel(
+//       {required this.name,
+//       required this.c_no,
+//       required this.gender,
+//       required this.dob,
+//       required this.age,
+//       required this.email,
+//       required this.location,
+//       this.id});
+//   static DataModel fromMap(Map<String, Object?> map) {
+//     final id = map['id'] as int;
+//     final name = map['name'] as String;
+//     final gender = map['gender'] as String;
+//     final age = map['age'] as String;
+//     final dob = map['dob'] as String;
+//     final phone = map['c_no'] as String;
+//     final email = map['email'] as String;
+//     final location = map['location'] as String;
+//     return DataModel(
+//         id: id,
+//         name: name,
+//         gender: gender,
+//         age: age,
+//         c_no: phone,
+//         dob: dob,
+//         email: email,
+//         location: location);
+//   }
+// }
+import 'package:social_project/pages/navigationpages/profilePage.dart';
+
 class DataModel {
   int? id;
-
   final String name;
-  final String c_no;
+  final String c_no; // from Contact table
   final String gender;
   final String dob;
   final String age;
   final String email;
-  final String location;
+  final String city; // from Location table
+  final String state;
 
-  DataModel(
-      {required this.name,
-      required this.c_no,
-      required this.gender,
-      required this.dob,
-      required this.age,
-      required this.email,
-      required this.location,
-      this.id});
+  DataModel({
+    this.id,
+    required this.name,
+    required this.c_no,
+    required this.gender,
+    required this.dob,
+    required this.age,
+    required this.email,
+    required this.city,
+    required this.state,
+  });
+
   static DataModel fromMap(Map<String, Object?> map) {
-    final id = map['id'] as int;
-    final name = map['name'] as String;
-    final gender = map['gender'] as String;
-    final age = map['age'] as String;
-    final dob = map['dob'] as String;
-    final phone = map['c_no'] as String;
-    final email = map['email'] as String;
-    final location = map['location'] as String;
+    final dobStr = map['dob']?.toString() ?? '';
     return DataModel(
-        id: id,
-        name: name,
-        gender: gender,
-        age: age,
-        c_no: phone,
-        dob: dob,
-        email: email,
-        location: location);
+      id: map['id'] as int? ?? 0,
+      name: map['name'] as String? ?? '',
+      gender: map['gender'] as String? ?? '',
+      dob: map['dob'] as String? ?? '',
+      age: calculateAge(dobStr),
+      email: map['email'] as String? ?? '',
+      c_no: map['contact_number'] as String? ?? '',
+      city: map['city'] as String? ?? '',
+      state: map['state'] as String? ?? '',
+    );
   }
+}
+
+
+String calculateAge(String dob) {
+  DateTime birthDate = DateTime.parse(dob);
+  DateTime today = DateTime.now();
+  int age = today.year - birthDate.year;
+  if (today.month < birthDate.month ||
+      (today.month == birthDate.month && today.day < birthDate.day)) {
+    age--;
+  }
+  return age.toString();
 }
 
 class Sprovider {
@@ -73,7 +125,7 @@ class Service {
   String stype;
   String icost;
   String cph;
-  int providerId; 
+  int providerId;
 
   Service({
     this.sId,
@@ -95,7 +147,6 @@ class Service {
     };
   }
 
-  
   factory Service.fromMap(Map<String, dynamic> map) {
     return Service(
       sId: map['s_id'],
@@ -107,6 +158,7 @@ class Service {
     );
   }
 }
+
 class Admin {
   int? adminId;
   int userId;

@@ -5,7 +5,6 @@ import 'package:social_project/models/data_model.dart';
 import 'package:social_project/pages/home/services.dart';
 import 'package:sqflite/sqflite.dart';
 
-//Customer tables and its functions
 int? icost;
 ValueNotifier<List<DataModel>> userListNotifier = ValueNotifier([]);
 ValueNotifier<List<DataModel>> q3userListNotifier = ValueNotifier([]);
@@ -19,25 +18,78 @@ Future<void> initializeDataBase() async {
     path,
     version: 1,
     onCreate: (Database db, int version) async {
-      await db.execute(
-          'CREATE TABLE user(id INTEGER PRIMARY KEY,name TEXT,gender TEXT,age TEXT,c_no TEXT,dob TEXT,email TEXT,location TEXT)');
+
+      await db.execute('''
+        CREATE TABLE user(
+          id INTEGER PRIMARY KEY,
+          name TEXT,
+          gender TEXT,
+          dob TEXT,
+          email TEXT,
+          location_id INTEGER,
+          FOREIGN KEY (location_id) REFERENCES Location(location_id)
+        )
+      ''');
+      await db.execute('''
+        CREATE TABLE Contact(
+          contact_id INTEGER PRIMARY KEY AUTOINCREMENT,
+          user_id INTEGER,
+          contact_number TEXT,
+          FOREIGN KEY (user_id) REFERENCES user(id)
+        )
+      ''');
+      await db.execute('''
+        CREATE TABLE Location(
+          location_id INTEGER PRIMARY KEY,
+          city TEXT,
+          state TEXT
+        )
+      ''');
     },
   );
 }
 
+// Future<void> addUser(DataModel value) async {
+//   final _id = await _db.rawInsert(
+//       'INSERT INTO user(name,gender,age,c_no,dob,email,location) VALUES(?,?,?,?,?,?,?)',
+//       [
+//         value.name,
+//         value.gender,
+//         value.age,
+//         value.c_no,
+//         value.dob,
+//         value.email,
+//         value.location,
+//       ]);
+//   value.id = _id;
+//   saveId(_id);
+//   getAllUsers();
+// }
 Future<void> addUser(DataModel value) async {
+  final locResult = await _db.rawQuery(
+      'SELECT location_id FROM Location WHERE LOWER(city) = LOWER(?) AND LOWER(state) = LOWER(?)',
+      [value.city, value.state]);
+  int locationId;
+  if (locResult.isNotEmpty) {
+    locationId = locResult.first['location_id'] as int;
+  } else {
+    locationId = await _db.rawInsert(
+      'INSERT INTO Location(city, state) VALUES (?, ?)',
+      [value.city, value.state],
+    );
+  }
+
   final _id = await _db.rawInsert(
-      'INSERT INTO user(name,gender,age,c_no,dob,email,location) VALUES(?,?,?,?,?,?,?)',
-      [
-        value.name,
-        value.gender,
-        value.age,
-        value.c_no,
-        value.dob,
-        value.email,
-        value.location,
-      ]);
+    'INSERT INTO user(name, gender, dob, email, location_id) VALUES (?, ?, ?, ?, ?)',
+    [value.name, value.gender, value.dob, value.email, locationId],
+  );
   value.id = _id;
+
+  await _db.rawInsert(
+    'INSERT INTO Contact(user_id, contact_number) VALUES (?, ?)',
+    [_id, value.c_no],
+  );
+
   saveId(_id);
   getAllUsers();
 }
@@ -47,10 +99,27 @@ Future<void> saveId(int id) async {
   sharedPreferences.setInt('id', id);
 }
 
+// Future<void> getAllUsers() async {
+//   final _values =
+//       await _db.rawQuery('SELECT * FROM user ORDER BY name COLLATE NOCASE');
+//   print(_values);
+//   userListNotifier.value.clear();
+//   for (var map in _values) {
+//     final user = DataModel.fromMap(map);
+//     userListNotifier.value.add(user);
+//   }
+//   userListNotifier.notifyListeners();
+// }
+
 Future<void> getAllUsers() async {
-  final _values =
-      await _db.rawQuery('SELECT * FROM user ORDER BY name COLLATE NOCASE');
-  print(_values);
+  final _values = await _db.rawQuery('''
+    SELECT u.*, l.city, l.state, c.contact_number
+    FROM user u
+    LEFT JOIN Location l ON u.location_id = l.location_id
+    LEFT JOIN Contact c ON u.id = c.user_id
+    ORDER BY u.name COLLATE NOCASE
+  ''');
+
   userListNotifier.value.clear();
   for (var map in _values) {
     final user = DataModel.fromMap(map);
@@ -59,10 +128,26 @@ Future<void> getAllUsers() async {
   userListNotifier.notifyListeners();
 }
 
+// Future<void> getUserLocation(String location) async {
+//   final _values = await _db.rawQuery(
+//       'SELECT * FROM user WHERE LOWER(location) = LOWER(?)', [location]);
+//   print(_values);
+//   q3userListNotifier.value.clear();
+//   for (var map in _values) {
+//     final user = DataModel.fromMap(map);
+//     q3userListNotifier.value.add(user);
+//   }
+//   q3userListNotifier.notifyListeners();
+// }
 Future<void> getUserLocation(String location) async {
-  final _values = await _db.rawQuery(
-      'SELECT * FROM user WHERE LOWER(location) = LOWER(?)', [location]);
-  print(_values);
+  final _values = await _db.rawQuery('''
+    SELECT u.*, l.city, l.state, c.contact_number
+    FROM user u
+    JOIN Location l ON u.location_id = l.location_id
+    LEFT JOIN Contact c ON u.id = c.user_id
+    WHERE LOWER(l.state) = LOWER(?)
+  ''', [location]);
+
   q3userListNotifier.value.clear();
   for (var map in _values) {
     final user = DataModel.fromMap(map);
@@ -71,15 +156,26 @@ Future<void> getUserLocation(String location) async {
   q3userListNotifier.notifyListeners();
 }
 
+// Future<void> deleteUser(int id) async {
+//   await _db.rawDelete('DELETE FROM user WHERE id = ?', [id]);
+//   await _spdb.rawDelete('DELETE FROM Admin Where user_id =?', [id]);
+//   getAllUsers();
+// }
+
 Future<void> deleteUser(int id) async {
+  await _db.rawDelete('DELETE FROM Contact WHERE user_id = ?', [id]);
   await _db.rawDelete('DELETE FROM user WHERE id = ?', [id]);
-  await _spdb.rawDelete('DELETE FROM Admin Where user_id =?', [id]);
+  await _spdb.rawDelete('DELETE FROM Admin WHERE user_id = ?', [id]);
   getAllUsers();
 }
 
 Future<DataModel?> getLastUser() async {
   final values =
-      await _db.rawQuery('SELECT * FROM user ORDER BY id DESC LIMIT 1');
+      await _db.rawQuery('''SELECT u.*, l.city, l.state, c.contact_number
+    FROM user u
+    LEFT JOIN Location l ON u.location_id = l.location_id
+    LEFT JOIN Contact c ON u.id = c.user_id
+    ORDER BY id DESC LIMIT 1''');
   if (values.isNotEmpty) {
     final user = DataModel.fromMap(values.first);
     return user;

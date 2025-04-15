@@ -41,7 +41,7 @@ class Userlist extends StatelessWidget {
                             color: Theme.of(context).colorScheme.tertiary),
                       ),
                       subtitle: Text(
-                        data.location,
+                        data.state,
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.tertiary),
                       ),

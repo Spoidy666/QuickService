@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_project/db/dataBase.dart';
+import 'package:social_project/pages/navigationpages/profilePage.dart';
 
 class Individualuser extends StatelessWidget {
   final index;
@@ -174,7 +175,7 @@ class Individualuser extends StatelessWidget {
                           height: 40,
                           child: Center(
                               child: Text(
-                            data.location,
+                            data.state + ', ' + data.city,
                             style: TextStyle(color: Colors.grey[800]),
                           ))),
                     )
